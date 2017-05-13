@@ -1,2 +1,2 @@
 # toderita.com
-Website
+Alex Toderita's Website. Deploy to Apps Engine with: gcloud app deploy
