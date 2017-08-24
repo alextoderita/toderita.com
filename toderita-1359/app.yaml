@@ -6,10 +6,10 @@ handlers:
 - url: /
   static_files: www/index.html
   upload: www/index.html
-  secure: never
+  secure: always
 
 - url: /(.*)
   static_files: www/\1
   upload: www/(.*)
-  secure: never
+  secure: always
 
