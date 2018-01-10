@@ -24,12 +24,12 @@ private void checkout(String repo){
 
 private void createDockerImage( String imageName ){
 	stage('Create Docker image'){
-		sh 'sudo docker build -t my_tomcat .'
+		sh 'sudo docker build -t my_tomcat . --file infra/docker/Dockerfile'
 	}
 }
 
 private void runDockerContainer(String containerName){
 	stage('Run Docker container'){
-		sh 'sudo docker run --security-opt=apparmor:unconfined --security-opt seccomp:unconfined --privileged -p 9999:8080 -d --name tomcat my_tomcattt'
+		sh 'sudo docker run --security-opt=apparmor:unconfined --security-opt seccomp:unconfined --privileged -p 9999:8080 -d --name tomcat my_tomcat'
 	}
 }
