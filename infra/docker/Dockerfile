@@ -1,5 +1,8 @@
 FROM tomcat:8
 
+# add server config file
+COPY infra/tomcat/server.xml /usr/local/tomcat/conf/
+
 # add admin user
 COPY infra/tomcat/tomcat-users.xml /usr/local/tomcat/conf/
 
