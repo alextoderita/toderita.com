@@ -24,7 +24,7 @@ private void checkout(String repo){
 
 private void createDockerImage( String imageName ){
 	stage('Create Docker image'){
-		sh 'cd infra/docker && sudo docker build -t my_tomcat .'
+		sh 'sudo docker build -t my_tomcat .'
 	}
 }
 
