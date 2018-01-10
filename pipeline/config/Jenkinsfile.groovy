@@ -30,6 +30,6 @@ private void createDockerImage( String imageName ){
 
 private void runDockerContainer(String containerName){
 	stage('Run Docker container'){
-		sh 'sudo docker run -p 9999:8080 -d --name tomcat my_tomcat'
+		sh 'sudo docker run -p 9999:8080 -d --name tomcat my_tomcat --security-opt=apparmor:unconfined'
 	}
 }
