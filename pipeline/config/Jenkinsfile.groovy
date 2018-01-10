@@ -1,6 +1,6 @@
 node(){
 
-    String jdkTool = tool name: 'JDK8', type: 'hudson.model.JDK'
+    //String jdkTool = tool name: 'JDK8', type: 'hudson.model.JDK'
     String repo = 'https://github.com/alextoderita/toderita.com.git'
 
     checkout(repo)
@@ -24,7 +24,7 @@ private void checkout(String repo){
 
 private void createDockerImage( String imageName ){
 	stage('Create Docker image'){
-		sh ' cd infra/docker && sudo docker build -t my_tomcat .'
+		sh 'cd infra/docker && sudo docker build -t my_tomcat .'
 	}
 }
 
