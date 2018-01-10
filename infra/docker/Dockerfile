@@ -1,6 +1,6 @@
 FROM tomcat:8
 
-RUN sudo ls -lsa .
+RUN pwd
 
 # add admin user
 COPY infra/tomcat/tomcat-users.xml /usr/local/tomcat/conf/
