@@ -1,35 +1,44 @@
-node(){
+def projectGitURL = "https://github.com/alextoderita/toderita.com.git"
+def gitCredentialsId = "toderita-com-git"
+def dockerImageName = "toderita-com-tomcat"
+def dockerContainerName = "toderita-com"
 
-    //String jdkTool = tool name: 'JDK8', type: 'hudson.model.JDK'
-    String repo = 'https://github.com/alextoderita/toderita.com.git'
-
-    checkout(repo)
-    createDockerImage("my_tomcat")
-    runDockerContainer("tomcat")
+node("master"){
+    getSourceCode(projectGitURL, gitCredentialsId)
+    buildDockerImage(dockerImageName)
+    deployDockerContainer(dockerContainerName, dockerImageName)
+    runInput()
+    deleteDockerContainer(dockerContainerName)
 }
 
-private void checkout(String repo){
-    stage('checkout'){
-        println "Checking out code"
-        checkout([
-            $class: 'GitSCM',
-            branches: [[name: '*/master']],
-            userRemoteConfigs: [[
-                credentialsId: 'toderita-com-git',
-                url: repo
-            ]]
-        ])
+def getSourceCode(projectGitURL, gitCredentialsId){
+    stage("Git Checkout"){
+        echo "Checking out the code from SCM"
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+            userRemoteConfigs: [[ credentialsId: "${gitCredentialsId}", url: "${projectGitURL}" ]]])
     }
 }
 
-private void createDockerImage( String imageName ){
-	stage('Create Docker image'){
-		sh 'sudo docker build -t my_tomcat . --file infra/docker/Dockerfile'
+def buildDockerImage(dockerImageName){
+	stage("Build Docker image"){
+		sh "sudo docker build -t ${dockerImageName} . --file infra/docker/Dockerfile"
 	}
 }
 
-private void runDockerContainer(String containerName){
-	stage('Run Docker container'){
-		sh 'sudo docker run --security-opt=apparmor:unconfined --security-opt seccomp:unconfined --privileged -p 9999:8080 -d --name tomcat my_tomcat'
+def deployDockerContainer(dockerContainerName, dockerImageName){
+	stage("Deploy Docker container"){
+		sh "sudo docker run --security-opt=apparmor:unconfined --security-opt seccomp:unconfined --privileged -p 9999:8080 -d --name ${dockerContainerName} ${dockerImageName}"
+	}
+}
+
+def runInput(){
+  stage("Approval Definition"){
+	  input id: "approval-1", message: 'Check the application status... Is it running?', ok: "Approve"
+  }
+}
+
+def deleteDockerContainer(dockerContainerName){
+	stage("Remove Docker container"){
+		sh "sudo docker rm --force ${dockerContainerName}"
 	}
 }
