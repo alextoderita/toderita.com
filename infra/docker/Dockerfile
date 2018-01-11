@@ -4,10 +4,10 @@ FROM tomcat:8
 COPY infra/tomcat/server.xml /usr/local/tomcat/conf/
 
 # add admin user
-COPY infra/tomcat/tomcat-users.xml /usr/local/tomcat/conf/
+# COPY infra/tomcat/tomcat-users.xml /usr/local/tomcat/conf/
 
 # allow access to manager application from remote hosts
-COPY infra/tomcat/context.xml /usr/local/tomcat/webapps/manager/META-INF/
+# COPY infra/tomcat/context.xml /usr/local/tomcat/webapps/manager/META-INF/
 
 # copy static content
 COPY toderita-1359 /usr/local/tomcat/webapps/
