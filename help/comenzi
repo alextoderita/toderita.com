@@ -1,3 +1,15 @@
 docker container ls
 docker rm --force tomcat
 docker exec -it tomcat bash
+
+
+checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+    userRemoteConfigs: [[ credentialsId: "${gitCredentialsId}", url: "${projectGitURL}" ]]])
+
+sh "sudo docker build -t ${dockerImageName} . --file infra/docker/Dockerfile"
+
+sh "sudo docker run --security-opt=apparmor:unconfined --security-opt seccomp:unconfined --privileged -p 9999:8080 -d --name ${dockerContainerName} ${dockerImageName}"
+
+input id: "approval-1", message: 'Check the application status... Is it running?', ok: "Approve"
+
+sh "sudo docker rm --force ${dockerContainerName}"
