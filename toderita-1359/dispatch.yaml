@@ -1,0 +1,6 @@
+dispatch:
+  - url: "*.toderita.com"
+    service: default
+  - url: "*.toderita.ro"
+    service: default
+
